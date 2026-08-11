@@ -1,0 +1,49 @@
+name: iOS Build
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.38.5'
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install cargo-lipo and iOS targets
+        run: |
+          rustup target add aarch64-apple-ios x86_64-apple-ios
+          cargo install cargo-lipo
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Build Rust library for iOS
+        run: cargo lipo --release
+
+      - name: Build Flutter iOS (.app)
+        run: flutter build ios --release --no-codesign
+
+      - name: Package .ipa
+        run: |
+          xcrun -sdk iphoneos PackageApplication \
+            -v build/ios/iphoneos/Runner.app \
+            -o build/ios/iphoneos/Runner.ipa
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bitchat-ios-${{ github.ref_name }}
+          path: build/ios/iphoneos/Runner.ipa

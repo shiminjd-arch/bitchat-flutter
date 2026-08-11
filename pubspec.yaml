@@ -1,0 +1,83 @@
+name: bitchat_flutter
+description: "匿匿 - Offline-first mesh chat with Tor & Nostr"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.4
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # State & DI
+  flutter_riverpod: ^2.6.1
+  riverpod_annotation: ^2.6.1
+
+  # Navigation
+  go_router: ^14.8.1
+
+  # Storage & Security
+  flutter_secure_storage: ^9.2.4
+  path_provider: ^2.1.5
+  shared_preferences: ^2.3.5
+  crypto: ^3.0.6
+  pointycastle: ^3.9.1
+
+  # Networking
+  dio: ^5.7.0
+  web_socket_channel: ^3.0.2
+  connectivity_plus: ^6.1.2
+
+  # BLE & Mesh
+  flutter_blue_plus: ^1.35.3
+  permission_handler: ^11.3.1
+
+  # WebRTC
+  flutter_webrtc: ^0.12.4
+
+  # Rust FFI
+  flutter_rust_bridge: ^2.9.0
+  ffi: ^2.1.3
+
+  # QR
+  qr_flutter: ^4.1.0
+  mobile_scanner: ^6.0.6
+
+  # UI
+  google_fonts: ^6.2.1
+  shimmer: ^3.0.0
+  cached_network_image: ^3.4.1
+  lottie: ^3.3.1
+  animations: ^2.0.11
+
+  # Utilities
+  intl: ^0.19.0
+  uuid: ^4.5.1
+  url_launcher: ^6.3.1
+  package_info_plus: ^8.3.0
+  device_info_plus: ^11.3.3
+  timeago: ^3.7.0
+
+  # HTTP client for Tor proxy
+  http: ^1.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  riverpod_generator: ^2.6.3
+  build_runner: ^2.4.14
+  flutter_launcher_icons: ^0.14.3
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/fonts/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
