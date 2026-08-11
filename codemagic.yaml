@@ -1,0 +1,41 @@
+workflows:
+  ios-build:
+    name: iOS Build
+    instance_type: mac_mini_m1
+    max_build_duration: 60
+    environment:
+      flutter: 3.38.5
+      xcode: latest
+      cocoapods: default
+    triggering:
+      events:
+        - push
+        - tag
+      branch_patterns:
+        - pattern: master
+      tag_patterns:
+        - pattern: 'v*'
+    scripts:
+      - name: Install Rust toolchain
+        script: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          source $HOME/.cargo/env
+          rustup target add aarch64-apple-ios x86_64-apple-ios
+      - name: Get Flutter packages
+        script: flutter pub get
+      - name: Build Rust for iOS
+        script: |
+          source $HOME/.cargo/env
+          cd rust
+          cargo build --release --target aarch64-apple-ios
+          cd ..
+      - name: Build iOS (ad-hoc)
+        script: flutter build ios --release --no-codesign
+      - name: Package IPA
+        script: |
+          cd build/ios/iphoneos
+          mkdir -p Payload
+          cp -r Runner.app Payload/
+          zip -r ../../../bitchat-ios.ipa Payload
+    artifacts:
+      - bitchat-ios.ipa
